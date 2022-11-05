@@ -21,6 +21,15 @@ app.listen(port, () => {
     console.log(`app listening on port ${port}`)
   });
 
+const authRouter  =  require("./routes/authRouter");
+const sellerRouter = require("./routes/sellerRouter");
+const buyerRouter = require("./routes/buyerRouter");
+
+app.use("/user",  authRouter);
+app.use("/seller",  sellerRouter);
+app.use("/buyer", buyerRouter);
+
+
 app.get('/', (req, res) => {
   res.send('I am up and running!')
 })
