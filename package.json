@@ -1,0 +1,21 @@
+{
+  "name": "hybr1d-assignment",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "dev": "nodemon src/index.ts",
+    "build": "tsc -p ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/premvikas/Hybr1d-assignment.git"
+  },
+  "author": "prem",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/premvikas/Hybr1d-assignment/issues"
+  },
+  "homepage": "https://github.com/premvikas/Hybr1d-assignment#readme"
+}
