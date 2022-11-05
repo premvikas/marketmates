@@ -2,9 +2,18 @@ import express from 'express'
 import 'dotenv/config';
 const cors = require('cors')
 
+import client  from '../src/configs/database';
+
 const app = express();
 app.use(express.json());
 app.use(cors());
+
+client.connect((err: any) => { 
+  if (err) {
+  console.log("err->", err);
+  } else {
+  console.log("DB ConnectedS");}
+});
 
 const port = process.env.PORT || 3001
 
