@@ -31,7 +31,7 @@ const registerUser  =  async (req:express.Request, res:express.Response) => {
             return res.status(400).json({error: "Mandatory fields are not sent"})
         }
 
-        const data : any = await client.query('SELECT email_id FROM user WHERE email_id = $1',[emailId]);
+        const data : any = await client.query('SELECT email_id FROM user1 WHERE email_id = $1',[emailId]);
 
         if (data.rows.length  !=  0) {
             return  res.status(400).json({error: "Account already exists for this Email Id, No need to register again."});
