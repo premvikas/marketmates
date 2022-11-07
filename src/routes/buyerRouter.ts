@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 
-import {authoriseUser } from '../controller/authController';
+import {authoriseUser } from '../middleware/authoriseUser';
 import {getSellersList, getSellerCatalog, createOrder} from '../controller/buyerController';
 
 

@@ -18,7 +18,7 @@ const createCatalog = async (req: any,res: express.Response) => {
         const sellerId  = req.sellerId;
 
         if(!sellerId){
-            return res.status(400).json({error: "sellerId doesnt exists"});
+            return res.status(400).json({error: "Not Authorised"});
         }
 
         if(!name){
@@ -47,16 +47,23 @@ const createCatalog = async (req: any,res: express.Response) => {
     } 
 }
 
-const createProduct = async (req: express.Request,res: express.Response ) => {
+const createProduct = async (req: any,res: express.Response ) => {
     try{
+
+        const sellerId  = req.sellerId;
+
+        if(!sellerId){
+            return res.status(400).json({error: "Not Authorised"});
+        }
+
         const {catalogId, productName, productPrice} : productInterface = req.body;
 
         if(!catalogId || !productName || !productPrice){
             return res.status(400).json({error: "mandatory fields are not present"});
         }
 
-        const insertProductText = 'INSERT INTO product (product_name, product_price, catalog_id, created_at) VALUES ($1,$2,$3, current_timestamp) RETURNING *'
-        const insertProductValue = [productName, productPrice, catalogId]
+        const insertProductText = 'INSERT INTO product (product_name, product_price, catalog_id, seller_id, created_at) VALUES ($1,$2,$3,$4, current_timestamp) RETURNING *'
+        const insertProductValue = [productName, productPrice, catalogId,sellerId ]
 
        const response =  await client.query(insertProductText, insertProductValue)
        return res.status(200).json({status: "success", body: response});
@@ -71,6 +78,10 @@ const getOrders = async (req: any,res: express.Response) => {
     
     try{
         const sellerId  = req.sellerId;
+
+        if(!sellerId){
+            return res.status(400).json({error: "Not Authorised"});
+        }
       
         const response = await client.query('SELECT * FROM order_v1 where seller_id = $1', [sellerId])
         const orders = response.rows;
