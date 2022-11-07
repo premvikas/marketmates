@@ -31,7 +31,7 @@ const registerUser  =  async (req:express.Request, res:express.Response) => {
             return res.status(400).json({error: "Mandatory fields are not sent"})
         }
 
-        const data : any = await client.query('SELECT email_id FROM user1 WHERE email_id = $1',[emailId]);
+        const data : any = await client.query('SELECT email_id FROM user_v1 WHERE email_id = $1',[emailId]);
 
         if (data.rows.length  !=  0) {
             return  res.status(400).json({error: "Account already exists for this Email Id, No need to register again."});
@@ -48,7 +48,7 @@ const registerUser  =  async (req:express.Request, res:express.Response) => {
         };
 
         await client.query
-        (`INSERT INTO user1 (user_name, email_id, phone_number, password, type, created_at) VALUES ($1,$2,$3,$4,$5, current_timestamp);`, 
+        (`INSERT INTO user_v1 (user_name, email_id, phone_number, password, type, created_at) VALUES ($1,$2,$3,$4,$5, current_timestamp);`, 
         [user.name, user.emailId, user.phoneNumber, user.password, user.type]);
     
         //const  token  = jwt.sign({emailId: user.emailId},process.env.SECRET_KEY);
@@ -69,7 +69,7 @@ const loginUser = async (req:express.Request, res:express.Response) => {
             return res.status(400).json({error: "Mandatory fields are not present"});
         }
     
-        const data = await client.query(`SELECT user1.password FROM user1 WHERE email_id = $1`, [emailId]) 
+        const data = await client.query(`SELECT user_v1.password FROM user_v1 WHERE email_id = $1`, [emailId]) 
         const user = data.rows;
     
         if (user.length === 0) {
@@ -83,11 +83,12 @@ const loginUser = async (req:express.Request, res:express.Response) => {
         if (result != true){
             return res.status(400).json({error: "Enter correct password!"});
         }
-
+    
         const token = jwt.sign({emailId: emailId}, process.env.SECRET_KEY as string);
         res.status(200).json({message: `User - ${emailId} signed in!`, token: token});
 
     } catch (err) {
+        console.log("err", err)
         res.status(500).json({
         error: err
         });

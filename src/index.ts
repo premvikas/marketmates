@@ -12,7 +12,7 @@ client.connect((err: any) => {
   if (err) {
   console.log("err->", err);
   } else {
-  console.log("DB ConnectedS");}
+  console.log("DB Connected");}
 });
 
 const port = process.env.PORT || 3001
