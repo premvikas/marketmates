@@ -3,7 +3,6 @@ import express from 'express';
 import client from '../configs/database';
 
 interface catalogInterface {
-    sellerId: number,
     name: string
 }
 
@@ -13,10 +12,11 @@ interface productInterface {
     productPrice: number
 }
 
-const createCatalog = async (req: express.Request,res: express.Response) => {
+const createCatalog = async (req: any,res: express.Response) => {
     try{
-        const {sellerId, name} : catalogInterface = req.body;
-    
+        const {name} : catalogInterface = req.body;
+        const sellerId  = req.sellerId;
+
         if(!sellerId){
             return res.status(400).json({error: "sellerId doesnt exists"});
         }
@@ -67,17 +67,16 @@ const createProduct = async (req: express.Request,res: express.Response ) => {
     }
 }
 
-const getOrdersBySellerId = async (req: express.Request,res: express.Response) => {
+const getOrders = async (req: any,res: express.Response) => {
     
     try{
-        const {sellerId} = req.params;
-       const id : any = Number(sellerId);
+        const sellerId  = req.sellerId;
       
-        const response = await client.query('SELECT * FROM order_v1 where seller_id = $1', [id])
+        const response = await client.query('SELECT * FROM order_v1 where seller_id = $1', [sellerId])
         const orders = response.rows;
         return res.status(200).json({status: "success", orders:orders});
     } catch (err){
-        console.log("getOrdersBySellerId",{err})
+        console.log("getOrders",{err})
         return res.status(500).json({error:err});
     }
 }
@@ -85,5 +84,5 @@ const getOrdersBySellerId = async (req: express.Request,res: express.Response) =
 export {
     createCatalog,
     createProduct,
-    getOrdersBySellerId
+    getOrders
 }

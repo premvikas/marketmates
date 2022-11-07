@@ -70,9 +70,11 @@ const loginUser = async (req:express.Request, res:express.Response) => {
             return res.status(400).json({error: "Mandatory fields are not present"});
         }
     
-        const data = await client.query(`SELECT user_v1.password FROM user_v1 WHERE email_id = $1`, [emailId]) 
+        const data = await client.query(`SELECT password,id,type FROM user_v1 WHERE email_id = $1`, [emailId]) 
         const user = data.rows;
     
+        const {id, type} = user[0];
+       
         if (user.length === 0) {
             res.status(400).json({
                 error: "User is not registered, Sign Up first",
@@ -84,8 +86,14 @@ const loginUser = async (req:express.Request, res:express.Response) => {
         if (result != true){
             return res.status(400).json({error: "Enter correct password!"});
         }
-    
-        const token = jwt.sign({emailId: emailId}, process.env.SECRET_KEY as string);
+      
+        const payload = {
+            emailId,
+            id,
+            type
+        }
+     
+        const token = jwt.sign(payload, process.env.SECRET_KEY as string);
         res.status(200).json({message: `User - ${emailId} signed in!`, token: token});
 
     } catch (err) {
@@ -96,10 +104,17 @@ const loginUser = async (req:express.Request, res:express.Response) => {
     };
 }
 
-const authoriseUser = async (req:express.Request, res:express.Response, next:express.NextFunction)  => {
+const authoriseUser = async (req: any, res:express.Response, next:express.NextFunction)  => {
     try{
         const { token } : any = req.headers;
-        await jwt.verify(token, process.env.SECRET_KEY as string);
+        const response : any = await jwt.verify(token, process.env.SECRET_KEY as string);
+        const {id, type} = response;
+    
+        if(type === "buyer"){
+            req.buyerId = id;
+        } else {
+            req.sellerId = id;
+        }
         next();
     } catch (err){
         console.log("authoriseUser -> ",{err})
