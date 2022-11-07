@@ -36,15 +36,12 @@ const createCatalog = async (req: express.Request,res: express.Response) => {
         const insertCatalogValues = [name, sellerId]
         await client.query(insertCatalogText,insertCatalogValues)
         
-        // const insertProductText = 'INSERT INTO product (product_name, product_price, catalog_id, created_at) VALUES ($1,$2,$3, current_timestamp)'
-        // const insertProductValue = [productName, productPrice, insertCatalogResponse.rows[0].id]
-        // await client.query(insertProductText, insertProductValue) 
         await client.query('COMMIT');
         
         return res.status(200).json({status: "success"})
 
     } catch(err){
-        console.log({err})
+        console.log("createCatalog",{err})
         await client.query('ROLLBACK')
         return res.status(400).json({error: err})
     } 
@@ -65,7 +62,7 @@ const createProduct = async (req: express.Request,res: express.Response ) => {
        return res.status(200).json({status: "success", body: response});
 
     } catch (err){
-        console.log({err})
+        console.log("createProduct",{err})
         return res.status(400).json({error: err});
     }
 }
@@ -78,9 +75,9 @@ const getOrdersBySellerId = async (req: express.Request,res: express.Response) =
       
         const response = await client.query('SELECT * FROM order_v1 where seller_id = $1', [id])
         const orders = response.rows;
-        console.log({response});
         return res.status(200).json({status: "success", orders:orders});
     } catch (err){
+        console.log("getOrdersBySellerId",{err})
         return res.status(500).json({error:err});
     }
 }

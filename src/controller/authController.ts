@@ -55,6 +55,7 @@ const registerUser  =  async (req:express.Request, res:express.Response) => {
         res.status(200).send({ message: `${type} - ${emailId} Registered Successfully`});
     }
     catch (err) {
+        console.log("registerUser-> ",{err})
         res.status(500).json({
         error: err, 
         });
@@ -88,7 +89,7 @@ const loginUser = async (req:express.Request, res:express.Response) => {
         res.status(200).json({message: `User - ${emailId} signed in!`, token: token});
 
     } catch (err) {
-        console.log("err", err)
+        console.log("loginUser ->",{err})
         res.status(500).json({
         error: err
         });
@@ -101,6 +102,7 @@ const authoriseUser = async (req:express.Request, res:express.Response, next:exp
         await jwt.verify(token, process.env.SECRET_KEY as string);
         next();
     } catch (err){
+        console.log("authoriseUser -> ",{err})
         return res.status(400).json({error: "Authorisation failed"});
     }
 }

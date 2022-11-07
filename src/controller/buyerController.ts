@@ -11,6 +11,7 @@ const getSellersList = async (req :express.Request,res: express.Response) => {
         return res.status(200).json({message: "success", data: listOfEmailIds});
 
     } catch(err){
+        console.log("getSellersList",{err})
         return res.status(500).json({error: err})
     }
 }
@@ -28,6 +29,7 @@ const getSellerCatalog = async (req :express.Request,res: express.Response) => {
         return res.status(200).json({message: "success", data: catalogList});
 
     } catch(err){
+        console.log("getSellerCatalog ->",{err})
         return res.status(500).json({error: err})
     }
 }
@@ -42,9 +44,6 @@ const createOrder = async (req :express.Request, res: express.Response) => {
         const response = await client.query('SELECT product_name,product_price,id FROM product WHERE id = ANY($1::int[])',[productIds]);
     
         const productDetails = response.rows;
-
-        //const productIdsMappedToSeller = productDetails.map(eachData => eachData.product_id)
-       // let difference = productIds.filter(x => !arr2.includes(x));
 
         let totalPrice = 0, totalQuantity = 0;
 
@@ -75,7 +74,7 @@ const createOrder = async (req :express.Request, res: express.Response) => {
 
        return res.status(200).json({message: "success", orderId: orderId});
     } catch (err){
-        console.log({err})
+        console.log("createOrder -> ",{err})
         await client.query('ROLLBACK')
         return res.status(400).json({error: err})
     }
