@@ -1,5 +1,5 @@
 {
-  "name": "hybr1d-assignment",
+  "name": "market-mates",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/premvikas/Hybr1d-assignment.git"
+    "url": "git+https://github.com/premvikas/market-mates.git"
   },
   "author": "prem",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/premvikas/Hybr1d-assignment/issues"
+    "url": "https://github.com/premvikas/market-mates/issues"
   },
-  "homepage": "https://github.com/premvikas/Hybr1d-assignment#readme",
+  "homepage": "https://github.com/premvikas/market-mates#readme",
   "dependencies": {
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
